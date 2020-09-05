@@ -1,0 +1,17 @@
+ags-tar
+
+Writes a compressed tar archive of a compiled AGS game to the current
+directory. The launch script and engine components will be flagged as
+executable.
+
+The Windows version of bsdtar must be installed. It will already be
+pre-installed on newer versions of Windows 10. If more than one version
+of tar is installed set the environment variable TAR to the path of the
+one which should be used.
+
+Usage:
+    ags-tar [drive:][path]launchscript
+
+Examples:
+    ags-tar Compiled\Linux\MyGame
+    ags-tar "D:\MyGame\Compiled\Linux\My Game"
