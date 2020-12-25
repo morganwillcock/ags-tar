@@ -40,16 +40,16 @@ type %GAME_MTREE% | %TAR% -cvvzf %GAME_ARCHIVE% -C %GAME_DIR% @-
 goto :end
 
 :error-notar
-echo No version of tar is available
-goto :end
+1>&2 echo No version of tar is available
+exit /b 1
 
 :error-wrongtar
-echo The version of tar which was found wasn't bsdtar
-goto :end
+1>&2 echo The version of tar which was found wasn't bsdtar
+exit /b 1
 
 :error-nogame
-echo File %GAME_PATH% does not exist 1>&2
-goto :end
+1>&2 echo File %GAME_PATH% does not exist
+exit /b 1
 
 :usage
 echo ags-tar
