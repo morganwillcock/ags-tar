@@ -7,7 +7,7 @@ if not defined TAR (
 )
 
 %TAR% --help | find "tar(bsdtar)" >nul || goto :error-wrongtar
-if "%~1" equ "" goto :usage
+if "%~1" == "" goto :usage
 set GAME_PATH="%~1"
 if not exist %GAME_PATH% goto :error-nogame
 
@@ -18,19 +18,19 @@ set GAME_MTREE="%~nx1.mtree"
 for /f %%a in ('certutil -hashfile %GAME_PATH% SHA1 ^| find /v " "') do set SHA1=%%a
 
 for /f "tokens=1-6 delims= " %%a in ('%TAR% -acf - --format mtree --options mtree:^^^!all^,mode^,gid^,uid^,type^,sha1 -C %GAME_DIR% *') do (
-    if "%%b" equ "" (
+    if "%%b" == "" (
         REM file header
         echo %%a >%GAME_MTREE%
     ) else (
-        if "%%f" equ "" (
+        if "%%f" == "" (
            REM directory
            echo %%a mode=755 %%c %%d %%e >>%GAME_MTREE%
         ) else (
            REM file
            set FILE_MODE=644
-           if "%%a" equ "./data/ags32" set FILE_MODE=755
-           if "%%a" equ "./data/ags64" set FILE_MODE=755
-           if "%%f" equ "sha1digest=%SHA1%" set FILE_MODE=755
+           if "%%a" == "./data/ags32" set FILE_MODE=755
+           if "%%a" == "./data/ags64" set FILE_MODE=755
+           if "%%f" == "sha1digest=%SHA1%" set FILE_MODE=755
            echo %%a mode=!FILE_MODE! %%c %%d %%e %%f >>%GAME_MTREE%
        )
     )
