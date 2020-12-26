@@ -6,7 +6,7 @@ if not defined TAR (
    set TAR=tar
 )
 
-%TAR% --help | find "tar(bsdtar)" >nul || goto :error-wrongtar
+"%TAR%" --help | find "(bsdtar)" >nul || goto :error-wrongtar
 if "%~1" == "" goto :usage
 set GAME_PATH="%~1"
 if not exist %GAME_PATH% goto :error-nogame
@@ -17,7 +17,7 @@ set GAME_MTREE="%~nx1.mtree"
 
 for /f %%a in ('certutil -hashfile %GAME_PATH% SHA1 ^| find /v " "') do set SHA1=%%a
 
-for /f "tokens=1-6 delims= " %%a in ('%TAR% -acf - --format mtree --options mtree:^^^!all^,mode^,gid^,uid^,type^,sha1 -C %GAME_DIR% *') do (
+for /f "tokens=1-6 delims= " %%a in ('^""%TAR%" -acf - --format mtree --options mtree:^^^!all^,mode^,gid^,uid^,type^,sha1 -C %GAME_DIR% *^"') do (
     if "%%b" == "" (
         REM file header
         echo %%a >%GAME_MTREE%
@@ -36,7 +36,7 @@ for /f "tokens=1-6 delims= " %%a in ('%TAR% -acf - --format mtree --options mtre
     )
 )
 
-type %GAME_MTREE% | %TAR% -cvvzf %GAME_ARCHIVE% -C %GAME_DIR% @-
+type %GAME_MTREE% | "%TAR%" -cvvzf %GAME_ARCHIVE% -C %GAME_DIR% @-
 goto :end
 
 :error-notar
